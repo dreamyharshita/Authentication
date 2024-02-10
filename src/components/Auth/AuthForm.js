@@ -22,7 +22,7 @@ const AuthForm = () => {
 
     
     try{
-    await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBthdfJ-193KbiUeJfb1ZaZt4qDbnofutM',
+    await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCV5W7x6ty12HJ2jV4jR7lfe7sEAj-ZKbc',
     {
       method:"POST",
       body: JSON.stringify({
@@ -48,14 +48,46 @@ const AuthForm = () => {
 
   async function LoginHandler(){
  setLoading(true);
-   
 
+ fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCV5W7x6ty12HJ2jV4jR7lfe7sEAj-ZKbc',
+  {
+    method:"POST",
+    body: JSON.stringify({
+      email:emailRef.current.value,
+      password:passwordRef.current.value,
+     returnSecureToken:true
+    }),
+    header:{
+      'Content-Type':'application/json'
+    }
+  }).then((res)=>{
+
+    alert("Logged In ");
+    console.log(res);
     setLoading(false);
-   
-   
     emailRef.current.value="";
-    passwordRef.current.value="";
-  }
+  passwordRef.current.value="";
+    console.log("hogya")})
+  .catch((err)=>{
+    setLoading(false);
+    emailRef.current.value="";
+  passwordRef.current.value="";
+     console.log(err);
+  })
+
+
+  
+  
+  
+
+ 
+    setLoading(false);
+    emailRef.current.value="";
+  passwordRef.current.value="";
+    
+  
+    
+}
 
   return (
     <section className={classes.auth}>
