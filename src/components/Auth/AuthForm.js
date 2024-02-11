@@ -1,6 +1,5 @@
-import { useState, useRef } from 'react';
-
-
+import { useState, useRef ,useContext} from 'react';
+import AuthContext from '../../store/auth-context';
 import classes from './AuthForm.module.css';
 
 const AuthForm = () => {
@@ -10,20 +9,18 @@ const AuthForm = () => {
 
   const emailRef=useRef();
   const passwordRef=useRef();
+   
+  const ctx=useContext(AuthContext);
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
   };
 
   async function SignUpHandler() {
-   
-
   setSignUp(true);
-
-    
+  if(passwordRef.current.value.length>8){
     try{
-    await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCV5W7x6ty12HJ2jV4jR7lfe7sEAj-ZKbc',
-    {
+    await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDzQJiXqoJ7rFl8c59SNmM64xXENyEqIrk',    {
       method:"POST",
       body: JSON.stringify({
         email:emailRef.current.value,
@@ -33,7 +30,11 @@ const AuthForm = () => {
       header:{
         'Content-Type':'application/json'
       }
-    })}
+    })
+    setSignUp(false);
+      emailRef.current.value="";
+    passwordRef.current.value="";
+  }
     catch(error){
       alert("You are not able to sign Up")
       setSignUp(false);
@@ -41,15 +42,18 @@ const AuthForm = () => {
     passwordRef.current.value="";
       console.log("error occured", error.message);
     }
-    setSignUp(false);
-    emailRef.current.value="";
-    passwordRef.current.value="";
+  }
+  else{
+    alert("Enter password with more than 8 characters");
+  }
+    
   }
 
   async function LoginHandler(){
  setLoading(true);
-
- fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCV5W7x6ty12HJ2jV4jR7lfe7sEAj-ZKbc',
+ if(passwordRef.current.value.length>8){
+try{
+ const res= await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDzQJiXqoJ7rFl8c59SNmM64xXENyEqIrk',
   {
     method:"POST",
     body: JSON.stringify({
@@ -60,33 +64,35 @@ const AuthForm = () => {
     header:{
       'Content-Type':'application/json'
     }
-  }).then((res)=>{
-
-    alert("Logged In ");
-    console.log(res);
-    setLoading(false);
-    emailRef.current.value="";
-  passwordRef.current.value="";
-    console.log("hogya")})
-  .catch((err)=>{
-    setLoading(false);
-    emailRef.current.value="";
-  passwordRef.current.value="";
-     console.log(err);
   })
-
-
-  
-  
-  
-
+  setLoading(false);
+    emailRef.current.value="";
+  passwordRef.current.value="";
+  if(res.ok){
+    alert("Logged In");
+    const data=await res.json();
+    console.log(data);
+    console.log(data.idToken);
+    ctx.login(data.idToken);
+  }
+  else{
+console.log("error");
+    alert("Authentication Failed...");
+  }
  
+
+}
+catch(err){
+  
     setLoading(false);
     emailRef.current.value="";
   passwordRef.current.value="";
-    
-  
-    
+     console.log("Error" ,err);
+  }
+ }
+ else{
+  alert("Enter more than 8 characters in password");
+ }  
 }
 
   return (
