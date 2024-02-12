@@ -1,6 +1,7 @@
 import { useState, useRef ,useContext} from 'react';
 import AuthContext from '../../store/auth-context';
 import classes from './AuthForm.module.css';
+import ProfileForm from '../Profile/ProfileForm';
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -66,18 +67,20 @@ try{
     }
   })
   setLoading(false);
-    emailRef.current.value="";
-  passwordRef.current.value="";
+    
   if(res.ok){
     alert("Logged In");
     const data=await res.json();
     console.log(data);
     console.log(data.idToken);
     ctx.login(data.idToken);
+    emailRef.current.value="";
+  passwordRef.current.value="";
   }
   else{
 console.log("error");
     alert("Authentication Failed...");
+    passwordRef.current.value="";
   }
  
 
@@ -96,38 +99,44 @@ catch(err){
 }
 
   return (
-    <section className={classes.auth}>
-      <h1>{isLogin ? 'Login' : 'Sign Up'}</h1>
-      <form >
-        <div className={classes.control}>
-          <label htmlFor='email'>Your Email</label>
-          <input ref={emailRef} type='email' id='email' required />
-        </div>
-        <div className={classes.control}>
-          <label htmlFor='password'>Your Password</label>
-          <input ref={passwordRef}
-            type='password'
-            id='password'
-            required
-          />
-        </div>
-        {!loading && isLogin && <button className={classes.actions} onClick={LoginHandler}>Login</button>}
-        {!signing  && !isLogin  &&  <button className={classes.actions} onClick={SignUpHandler} >Sign Up</button>}
-        {loading && <p>Loading...</p>}
-        {signing && <p>Siging Up</p>}
-      
-        
-        <div className={classes.actions}>
-          <button
-            type='button'
-            className={classes.toggle}
-            onClick={switchAuthModeHandler}
-          >
-            {isLogin ? 'Create new account' : 'Login with existing account'}
-          </button>
-        </div>
-      </form>
-    </section>
+    <>
+   {!ctx.isLogin  &&  <section className={classes.auth}>
+
+<h1>{isLogin ? 'Login' : 'Sign Up'}</h1>
+<form >
+  <div className={classes.control}>
+    <label htmlFor='email'>Your Email</label>
+    <input ref={emailRef} type='email' id='email' required />
+  </div>
+  <div className={classes.control}>
+    <label htmlFor='password'>Your Password</label>
+    <input ref={passwordRef}
+      type='password'
+      id='password'
+      required
+    />
+  </div>
+  {!loading && isLogin && <button className={classes.actions} onClick={LoginHandler}>Login</button>}
+  
+  {!signing  && !isLogin  &&  <button className={classes.actions} onClick={SignUpHandler} >Sign Up</button>}
+  {loading && <p>Loading...</p>}
+  {signing && <p>Siging Up</p>}
+
+  
+  <div className={classes.actions}>
+    <button
+      type='button'
+      className={classes.toggle}
+      onClick={switchAuthModeHandler}
+    >
+      {isLogin ? 'Create new account' : 'Login with existing account'}
+    </button>
+  </div>
+</form>
+</section>}
+{ctx.isLogin && <ProfileForm/>}
+   
+    </>
   );
 };
 
