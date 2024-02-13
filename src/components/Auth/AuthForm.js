@@ -1,7 +1,8 @@
 import { useState, useRef ,useContext} from 'react';
 import AuthContext from '../../store/auth-context';
 import classes from './AuthForm.module.css';
-import ProfileForm from '../Profile/ProfileForm';
+
+import UserProfile from '../Profile/UserProfile';
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -74,6 +75,7 @@ try{
     console.log(data);
     console.log(data.idToken);
     ctx.login(data.idToken);
+    
     emailRef.current.value="";
   passwordRef.current.value="";
   }
@@ -134,7 +136,7 @@ catch(err){
   </div>
 </form>
 </section>}
-{ctx.isLogin && <ProfileForm/>}
+{ctx.isLogin && <UserProfile/>}
    
     </>
   );

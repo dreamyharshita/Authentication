@@ -7,10 +7,12 @@ const ContextProvider=(props)=>{
     function loginHandler(token)
     {
         setToken(token);
+        localStorage.setItem("token",token);
     }
     function logoutHandler()
     {
         setToken(null);
+        localStorage.removeItem("token");
     }
 
     const authValue = {

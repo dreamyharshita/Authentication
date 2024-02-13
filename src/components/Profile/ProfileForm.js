@@ -28,7 +28,7 @@ const ProfileForm = () => {
   }
   return (
     <form className={classes.form}>
-      <h1 style={{justifyContent:'center'}}>YOUR USER PROFILE</h1>
+    
       <div className={classes.control}>
         
         <label htmlFor='new-password'>New Password</label>

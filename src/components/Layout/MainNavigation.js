@@ -1,11 +1,11 @@
-import { Link } from 'react-router-dom';
-
-import AuthContext from '../../store/auth-context';
-import classes from './MainNavigation.module.css';
+import { Link, useHistory } from 'react-router-dom';
 import { useContext } from 'react';
 
-const MainNavigation = () => {
+import classes from './MainNavigation.module.css';
+import AuthContext from '../../store/auth-context';
 
+const MainNavigation = () => {
+  const history = useHistory()
   const authCtx = useContext(AuthContext)
   const isLoggedIn = authCtx.isLogin;
 
@@ -13,7 +13,9 @@ const MainNavigation = () => {
   {
     e.preventDefault();
     authCtx.logout()
+    history.replace('/')
   }
+
   return (
     <header className={classes.header}>
       <Link to='/'>
@@ -22,10 +24,10 @@ const MainNavigation = () => {
       <nav>
         <ul>
           <li>
-         {!isLoggedIn &&  <Link to='/auth'>Login</Link>}  
+            {!isLoggedIn && <Link to='/auth'>Login</Link>}
           </li>
           <li>
-          {isLoggedIn &&   <Link to='/profile'>Profile</Link> }
+            {isLoggedIn && <Link to='/profile'>Profile</Link>}
           </li>
           <li>
             {isLoggedIn && <button onClick={logoutHandler}>Logout</button>}
@@ -35,5 +37,4 @@ const MainNavigation = () => {
     </header>
   );
 };
-
 export default MainNavigation;
