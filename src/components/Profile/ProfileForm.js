@@ -23,7 +23,7 @@ const ProfileForm = () => {
   ).then((res) =>{
     alert("password changed");
     passwordRef.current.value="";
-    console.log(res)
+  
   })
   }
   return (

@@ -72,8 +72,7 @@ try{
   if(res.ok){
     alert("Logged In");
     const data=await res.json();
-    console.log(data);
-    console.log(data.idToken);
+    
     ctx.login(data.idToken);
     
     emailRef.current.value="";

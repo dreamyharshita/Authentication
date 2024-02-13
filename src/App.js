@@ -13,8 +13,16 @@ function App() {
   const ctx=useContext(AuthContext);
   useEffect(()=>{
       const tok=localStorage.getItem("token");
-     ctx.token=tok;
-      ctx.login(tok);
+     
+      if(tok===null){
+        localStorage.removeItem("token");
+      }
+      else{
+        ctx.token=tok;
+        ctx.login(tok);
+
+      }
+    
   },[ctx]);
  
   return (
@@ -32,7 +40,9 @@ function App() {
         </Route>}  
         {ctx.isLogin && <Redirect to="/profile"/>}
       
-       
+       <Route path="*">
+<Redirect to="/auth"></Redirect>
+       </Route>
         
         </Switch>
         
